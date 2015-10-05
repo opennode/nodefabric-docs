@@ -14,12 +14,12 @@ Docker, Consul and HAProxy are used internally for coordinating and maintaining 
 
 **Features include:**
 
-- prebuilt NodeFabric Host Image and optional remote cluster auto-join service; 
-- zero-­configuration data backend fabric deployment ­- just "Boot--and­-Go";
+- prebuilt NodeFabric Host Image and optional remote cluster auto-join service 
+- zero-­configuration data backend fabric deployment ­- just "Boot--and­-Go"
 - self-contained and runs everywhere - AWS, Openstack, VMWare, KVM, bare-metal etc.
-- very low infrastructure capabilities requirements for clustering -- it does not require multicast networking or node fencing;
-- clustered by design;
-- built-in service discovery and health monitoring;
+- very low infrastructure capabilities requirements for clustering -- it does not require multicast networking or node fencing
+- clustered by design
+- built-in service discovery and health monitoring
 
 **Example use cases:**
 
@@ -44,11 +44,3 @@ License
 -------
 
 NodeFabric is released under open-source Apache v2 license.
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-

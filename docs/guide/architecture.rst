@@ -6,13 +6,13 @@ Supported modules (ie included services) are delivered as Docker containers and 
 
 There are currently two types of NodeFabric Host Images being released:
 
-- downloadable CentOS Atomic Host based build (in QCow2, VMDK, VirtualBox OVA/VDI and PVM image output formats);
+- downloadable CentOS Atomic Host based build (in QCow2, VMDK, VirtualBox OVA/VDI and PVM image output formats)
 - RedHat Enterprise Linux based AMI available from Amazon EC2 cloud Marketplace
 
 Docker containers that are included in the NodeFabric Host Image build:
 
-- nf-consul, nf-registrator, nf-haproxy -- which form the NodeFabric Core Layer services;
-- nf-galera implementing MariaDB-Galera service;
+- nf-consul, nf-registrator, nf-haproxy -- which form the NodeFabric Core Layer services
+- nf-galera implementing MariaDB-Galera service
 - nf-ceph-mon (ceph cluster monitor) , nf-ceph-mds (ie CephFS) for Ceph storage services
 
 The following diagram provider high-level architecture overview for the modular NodeFabric Host system:
@@ -27,8 +27,8 @@ This is the highly available integration and coordination layer -- based on Cons
 
 More about the Core Layer modules/containers and their roles:
 
-- nf-consul: provides service discovery, health monitoring and distributed state database based on Consul (`<https://www.consul.io>`_);
-- nf-registrator: implements Consul compatible service registry bridge for Docker (`<http://gliderlabs.com/registrator>`_); 
+- nf-consul: provides service discovery, health monitoring and distributed state database based on Consul (`<https://www.consul.io>`_)
+- nf-registrator: implements Consul compatible service registry bridge for Docker (`<http://gliderlabs.com/registrator>`_)
 - nf-haproxy: enables internal service endpoints, utilizing well-known HAProxy load-balancer (`<http://www.haproxy.com>`_)
 
 About MariaDB-Galera service

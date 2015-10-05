@@ -12,7 +12,7 @@ Current deployment targets supported are: Amazon EC2, Openstack, VMWare, KVM, Pa
 
 In order to bootstrap NodeFabric cluster there are two options to choose from:
 
-- zero-configuration "Boot-and-Go" mode (which requires cloud user-data);
+- zero-configuration "Boot-and-Go" mode (which requires cloud user-data)
 - manual bootstrap procedure (ie supplying cluster hostmap and minimal config options)
 
 
@@ -21,19 +21,19 @@ Requirements and recommendations
 
 General requirements:
 
-- 3 or 5 cluster nodes - either VMs or bare-metal hosts; 
-- at least 1GB of RAM per node;
-- at least 10GB dedicated disk device per node for OS root;
-- at least 64GB dedicated disk device per node for Ceph OSD data;
+- 3 or 5 cluster nodes - either VMs or bare-metal hosts 
+- at least 1GB of RAM per node
+- at least 10GB dedicated disk device per node for OS root
+- at least 64GB dedicated disk device per node for Ceph OSD data
 - at least 1x1Gbit network interface
 
 Recommended cluster setup:
 
-- 3 cluster nodes (for single node fault tolerance);
-- 4GB or more RAM per node;
-- 32GB OS root disk;
-- 1x146GB or more Ceph data disks per each node (more and larger disks are always better, SSDs highly recommended for improved perfomance); 
-- 10Gbit or Infiniband network fabric recommended for better perfomance (especially beneficial for Ceph);
+- 3 cluster nodes (for single node fault tolerance)
+- 4GB or more RAM per node
+- 32GB OS root disk
+- 1x146GB or more Ceph data disks per each node (more and larger disks are always better, SSDs highly recommended for improved perfomance) 
+- 10Gbit or Infiniband network fabric recommended for better perfomance (especially beneficial for Ceph)
 - external load-balancer for services that need to be published for remote consumers 
 
 .. note:: Depending on your deployment target you could use external load-balancers available in AWS, Openstack or in VMWare vSphere

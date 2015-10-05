@@ -24,14 +24,14 @@ This default console based dashboard provides cluster-wide status overview acros
 
 Global services statuses are presented as RUNNING, DEGRADED or FAILED:
 
-- **RUNNING** means that all nodes participating in service are OK;
-- **DEGRADED** means that service has quorum and is operational - yet one or more nodes participating are failing;
+- **RUNNING** means that all nodes participating in service are OK
+- **DEGRADED** means that service has quorum and is operational - yet one or more nodes participating are failing
 - **FAILED** means that service has lost quorum and is not available
 
 Service statuses on each node participating in a global service offering are colored as follows:
 
-- **GREEN** means service is OK (ie passing health checks);
-- **YELLOW** means that service module is not started;
+- **GREEN** means service is OK (ie passing health checks)
+- **YELLOW** means that service module is not started
 - **RED** means that service module is started but not passing health checks (ie failing)
 
 .. note:: Underlined node represents current Consul master  

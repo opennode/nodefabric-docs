@@ -11,11 +11,7 @@ git clone https://github.com/opennode/nodefabric-docs.git
 Installing python-sphinx on MacOSX:
 ```bash
 brew install python
-pip install --upgrade pip setuptools
-easy_install -U sphinx
-pip install sphinx_bootstrap_theme
-pip install sphinx_rtd_theme
-pip install sphinx-autobuild
+pip install -r requirements.txt
 ```
 
 ## Creating and building
