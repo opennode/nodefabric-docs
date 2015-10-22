@@ -6,9 +6,9 @@ NodeFabric is distributed as a prebuilt VM (or bare-metal) host image -- which i
 There are two different NodeFabric Host Image builds released:
 
 - RHEL 7 based AMI which is available from AWS Marketplace: https://aws.amazon.com/marketplace/pp/B015WKQZOM
-- CentOS 7 Atomic Host based image - available in QCow2, Parallels Desktop PVM, VirtualBox OVA (and VDI) and VMWare VMDK formats -- and downloadable from: https://sourceforge.net/projects/opennode/files/NodeFabric/
+- CentOS 7 based image - available in qcow2, Parallels Desktop pvm, VirtualBox ova (and vdi), Hyper-V vhdx and VMWare vmdk formats -- and downloadable from here: https://sourceforge.net/projects/opennode/files/NodeFabric/
 
-Current deployment targets supported are: Amazon EC2, Openstack, VMWare, KVM, Parallels Desktop, VirtualBox and bare-metal.
+Current deployment targets supported are: Amazon EC2, Openstack, VMWare, KVM, Parallels Desktop, VirtualBox, Hyper-V and bare-metal.
 
 In order to bootstrap NodeFabric cluster there are two options to choose from:
 
@@ -39,12 +39,14 @@ Recommended cluster setup:
 .. note:: Depending on your deployment target you could use external load-balancers available in AWS, Openstack or in VMWare vSphere
 
 .. note:: If you need higher fault tolerance factor than 1 -- then you need to deploy 5-node cluster (for FT=2 and sacrificing MariaDB-Galera write speed)
-.. note:: 5-node clusters are not yet fully supported (althou they may work up to some extent)
+.. note:: 5-node clusters are EXPERIMENTAL at the moment!
 
 User-data
 +++++++++++++++++
 
-NodeFabric Host Images can take advantage of cloud config metadata (ie user-data) -- in the target environments where it is available and supplied at boot time. It uses standard cloud-init package (for setting login ssh key / password, etc) together with custom nodefabric-cloudinit script (for NF specific options). User-data is used mainly for 2 things:
+.. note:: cloud-init is only valid for AWS AMI and nf-centos7-cloud.qcow2 images! Other (ie hypervisor) images do include default user account: "centos:changeme".
+
+NodeFabric Host Images targeted for cloud deployments can take advantage of config metadata (ie user-data) -- in the cloud environments where it is available and supplied at boot time. It uses standard cloud-init package (for setting login ssh key / password, etc) together with custom nodefabric-cloudinit script (for NF specific options). User-data is used mainly for 2 things:
 
 - activating instances ssh login credentials
 - enabling "Boot-and-Go" mode for zero-configuration Core Layer bootstrap
@@ -59,12 +61,15 @@ Here is the full list of supported user-data (key=value based) options understoo
    "ATLAS_ENVNAME", "Environment name (required for Boot-and-Go mode)"
    "NODENAME", "Supply your predefined hostname (optional)"
    "SHARED_SECRET", "Consul Serf shared key (optional)"
+   "BOOTSTRAP_EXPECT", "Override initial cluster size - which is 3 by default (optional)"
 
 .. note:: ATLAS_TOKEN can be obtained from: https://atlas.hashicorp.com/
 
 .. note:: ATLAS_ENVNAME must be in the following format: <your_atlas_username>/<desired_deployment_name> (ie jdunlop/my-cluster). Environment itself will be auto-created in ATLAS when first node auto-registers with the service during boot-up.
 
 .. note:: SHARED_SECRET can be generated as: 'openssl rand -base64 16'
+
+.. note:: Set BOOTSTRAP_EXPECT=5 when bootstrapping 5-node clusters
 
 .. note:: Current version of nodefabric-cloudinit script parses supported options from: http://169.254.169.254/latest/user-data
 
@@ -88,13 +93,15 @@ Pre-flight check
 - ATLAS_TOKEN (optional) - required for Core Layer remote auto-bootstrap service
 - ATLAS_ENVNAME (optional) - required for Core Layer remote auto-bootstrap service
 - SHARED_SECRET (optional) - required for Core Layer inter-communication encryption
-- your ssh keypair - required for activating ssh login
+- your ssh keypair (required for cloud deployments) - for activating ssh login
 
 
 Amazon EC2
 +++++++++++++++++
 
-Redhat Enterprise Linux based NodeFabric AMI is available from Amazon EC2 Marketplace (AWSMP). It's an EBS backed HVM AMI. You can deploy node instances by using AWS EC2 console (method #1, recommeded) OR directly from AWSMP NodeFabric product page (method #2). EC2 console method is the recommended option for NF AWS deployments - as it's launch wizard supports instance user-data input, additional storage configuration and launching multiple instances in one go. The benefit from the alternative AWSMP 1-Click deployment method is that it supplies you with auto-generated security group.
+Redhat Enterprise Linux based NodeFabric AMI is available from Amazon EC2 Marketplace (AWSMP). It's an EBS backed HVM AMI. You can deploy node instances by using AWS EC2 console (method #1, recommeded) OR directly from AWSMP NodeFabric product page (method #2). 
+
+EC2 console method is the recommended option for NF AWS deployments - as it's launch wizard supports instance user-data input, additional storage configuration and launching multiple instances in one go. The benefit from the alternative AWSMP 1-Click deployment method is that it supplies you with auto-generated security group.
 
 Here is the example deployment diagram for AWS EC2 (spanning over multiple Availability Zones): 
 
@@ -205,21 +212,19 @@ TODO
 .. parsed-literal::
 
     # Set NodeFabric image version to download
-    NF_VERSION="\ |release|\ "
+    NF_VERSION="\ |release|\ "   
 
 .. code-block:: bash
 
     # Download image
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-atomic-${NF_VERSION}.qcow2.gz
+    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-centos7-cloud-${NF_VERSION}.qcow2
     
-    # Unpack image
-    gunzip nf-atomic-${NF_VERSION}.qcow2.gz
 
     # Loading image to Glance catalog
     glance image-create --name="NodeFabric-${NF_VERSION}" --is-public=true \
 	--min-disk 10 --min-ram 1024 --progress \
 	--container-format=bare --disk-format=qcow2 \
-	--file nf-atomic-${NF_VERSION}.qcow2
+	--file nf-centos7-cloud-${NF_VERSION}.qcow2
 
 
 VMWare
@@ -235,10 +240,10 @@ TODO
 .. code-block:: bash
 
     # Download image
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-atomic-${NF_VERSION}.vmdk.gz
+    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-centos7-${NF_VERSION}.vmdk.gz
     
     # Unpack image
-    gunzip nf-atomic-${NF_VERSION}.vmdk.gz
+    gunzip nf-centos7-${NF_VERSION}.vmdk.gz
 
 
 Libvirt KVM
@@ -254,40 +259,28 @@ Libvirt KVM
 .. code-block:: bash
 
     # Download image
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-atomic-${NF_VERSION}.qcow2.gz
-
-    # Download cloud-init iso
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/cloud-init.iso
-    
-    # Unpack 
-    gunzip nf-atomic-${NF_VERSION}.qcow2.gz
+    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-centos7-bare-${NF_VERSION}.qcow2
 
     # Clone under libvirt disk images location for ALL cluster nodes
-    for in `seq 1 3`; do rsync -av --progress nf-atomic-${NF_VERSION}.qcow2 /var/lib/libvirt/images/nf-node${i}.qcow2; done
-
-    # Move cloud-init.iso into standard libvirt images location
-    mv cloud-init.iso /var/lib/libvirt/images/
+    for in `seq 1 3`; do rsync -av --progress nf-centos7-bare-${NF_VERSION}.qcow2 /var/lib/libvirt/images/nf-node${i}.qcow2; done
 
     # Launch node1
     virt-install \
-    	--name=nf-node1 --memory=1024 --vcpus=1 \
+    --name=nf-node1 --memory=1024 --vcpus=1 \
 	--disk=/var/lib/libvirt/images/nf-node1.qcow2,device=disk,bus=virtio \
-	--cdrom /var/lib/libvirt/images/cloud-init.iso \
-	--noautoconsole --vnc --accelerate --os-type=linux --os-variant=rhel7 --boot hd
+	--noautoconsole --vnc --accelerate --os-type=linux --os-variant=rhel7 --import
 
     # Launch node2
     virt-install \
-    	--name=nf-node2 --memory=1024 --vcpus=1 \
+    --name=nf-node2 --memory=1024 --vcpus=1 \
 	--disk=/var/lib/libvirt/images/nf-node2.qcow2,device=disk,bus=virtio \
-	--cdrom /var/lib/libvirt/images/cloud-init.iso \
-	--noautoconsole --vnc --accelerate --os-type=linux --os-variant=rhel7 --boot hd
+	--noautoconsole --vnc --accelerate --os-type=linux --os-variant=rhel7 --import
 
     # Launch node3
     virt-install \
-    	--name=nf-node3 --memory=1024 --vcpus=1 \
+    --name=nf-node3 --memory=1024 --vcpus=1 \
 	--disk=/var/lib/libvirt/images/nf-node3.qcow2,device=disk,bus=virtio \
-	--cdrom /var/lib/libvirt/images/cloud-init.iso \
-	--noautoconsole --vnc --accelerate --os-type=linux --os-variant=rhel7 --boot hd
+	--noautoconsole --vnc --accelerate --os-type=linux --os-variant=rhel7 --import
 
 
 Parallels Desktop
@@ -303,10 +296,10 @@ TODO
 .. code-block:: bash
 
     # Download image
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-atomic-${NF_VERSION}.pvm.gz
+    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-centos7-${NF_VERSION}.pvm.tgz
     
     # Unpack image
-    gunzip nf-atomic-${NF_VERSION}.pvm.gz
+    gunzip nf-centos7-${NF_VERSION}.pvm.tgz
 
 VirtualBox
 +++++++++++++++++
@@ -321,10 +314,8 @@ TODO
 .. code-block:: bash
 
     # Download image
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-atomic-${NF_VERSION}.ova.gz
+    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-centos7-${NF_VERSION}.ova
     
-    # Unpack image
-    gunzip nf-atomic-${NF_VERSION}.ova.gz
 
 Bare metal
 +++++++++++++++++
@@ -343,10 +334,7 @@ TODO
 .. code-block:: bash
 
     # Download image
-    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-atomic-${NF_VERSION}.qcow2.gz
-
-    # Unpack 
-    gunzip nf-atomic-${NF_VERSION}.qcow2.gz
+    curl -L -O http://downloads.sourceforge.net/project/opennode/NodeFabric/nf-centos7-bare-${NF_VERSION}.qcow2
 
     # Write image to physical disk device
-    qemu-img convert test.qcow2 -O raw $BLKDEV
+    qemu-img convert nf-centos7-bare-${NF_VERSION}.qcow2 -O raw $BLKDEV

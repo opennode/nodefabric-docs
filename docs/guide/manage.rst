@@ -54,7 +54,7 @@ Editing support for Consul highly available Key-Value store is also included.
     # Setup local port forwarding over SSH connection to Consul UI port
     NODE_IP="10.211.55.100"
     NODE_USER="centos"
-    KEY_PATH=".ssh/id_rsa"
+    KEY_PATH="~/.ssh/id_rsa"
     ssh -L 8500:localhost:8500 -i ${KEY_PATH} ${NODE_USER}@${NODE_IP}
     
     # Load Consul UI in your web browser
@@ -104,7 +104,7 @@ TODO
 MariaDB-Galera service
 ++++++++++++++++++++++
 
-TODO
+nf-galera-ctl management utility provides several helpful commands:
 
 .. code-block:: bash
 
@@ -117,10 +117,30 @@ TODO
        nf-galera-ctl enable
        nf-galera-ctl disable
        nf-galera-ctl bootstrap
+       nf-galera-ctl dbadmin-add <username> <database> [password]
+       nf-galera-ctl passwd <username> [password]
+       nf-galera-ctl user-list
+       nf-galera-ctl user-remove <username>
+       nf-galera-ctl database-list
+       nf-galera-ctl database-create <database>
+       nf-galera-ctl database-destroy <database>
 
    Help:
 
        nf-galera-ctl help
+
+For controlling cluster-wide MariaDB-Galera service status you can use the following commands:
+
+.. code-block:: bash
+
+    # Enabling and starting nf-galera docker containers across cluster nodes
+    nf-galera-ctl enable
+
+    # Stopping and disabling nf-galera docker containers across cluster nodes
+    nf-galera-ctl disable
+
+    # Issuing manual bootstrap (for example if MariaDB-Galera auto-bootstrap failed, this command is re-run safe)
+    nf-galera-ctl bootstrap
 
 
 Ceph storage services
@@ -185,7 +205,11 @@ TODO
 
 
 
-Update
+System update
 ++++++++++++++++++++++
 
-TODO
+Included nodefabric-update utility will update OS root and NodeFabric service containers:
+
+.. code-block:: bash
+
+   [centos@ip-172-30-0-100 ~]$ sudo nodefabric-update

@@ -6,12 +6,12 @@ Supported modules (ie included services) are delivered as Docker containers and 
 
 There are currently two types of NodeFabric Host Images being released:
 
-- downloadable CentOS Atomic Host based build (in QCow2, VMDK, VirtualBox OVA/VDI and PVM image output formats)
+- downloadable CentOS 7 based image build (in QCow2, VMDK, VHDX, VirtualBox OVA/VDI and Parallels PVM image output formats)
 - RedHat Enterprise Linux based AMI available from Amazon EC2 cloud Marketplace
 
 Docker containers that are included in the NodeFabric Host Image build:
 
-- nf-consul, nf-registrator, nf-haproxy -- which form the NodeFabric Core Layer services
+- nf-consul, nf-registrator, nf-haproxy -- which are part of NodeFabric Core Layer services
 - nf-galera implementing MariaDB-Galera service
 - nf-ceph-mon (ceph cluster monitor) , nf-ceph-mds (ie CephFS) for Ceph storage services
 
@@ -55,16 +55,15 @@ More info about Ceph can be found here:
 Currently its block-level (RDB) and file-level (CephFS) interfaces are supported and available in NodeFabric. Althou Ceph monitors and metadata daemons are run within Docker containers, OSDs (Object Storage Daemons) are not. These are run directly in the host OS context - one OSD per each underlying Ceph data disk device. You need to provide and attach dedicated block devices to NodeFabric VM/host nodes that will be initialized as Ceph data disks at later stage. However you can decide on exact block devices attachment distribution (which disks to which hosts) and you can have multiple disks (and OSDs) on each and every NodeFabric node.  
 
 
-About Docker, CentOS Atomic and RHEL
+About Docker, CentOS and RHEL
 ++++++++++++++++++++++++++++++++++++
 
 NodeFabric Host Images utilize Docker linux containers technology for achieving modular and expandable architecture. User defined or third-party services can be loaded as additional docker containers and integrated with the NodeFabric Core Layer.
 
-CentOS Atomic Host is a lean operating system designed to run Docker containers, derived from Red Hat Enterprise Linux Atomic Host. NodeFabric Host Image itself is a slightly customized CentOS Atomic Host build -- adding NodeFabric docker containers and Core Layer rpm packages -- while NodeFabric AMI is based on original RedHat Enterprise Linux distribution. CentOS Atomic Host is docker oriented host OS and implements versioned OS root tree updates with rollback capabilities.
+CentOS is a stable Docker Host platform derived from the sources of Red Hat Enterprise Linux (RHEL). NodeFabric Host Image itself is a slightly customized CentOS Docker Host build -- adding NodeFabric docker containers and Core Layer rpm packages -- while NodeFabric AMI is based on original RedHat Enterprise Linux distribution.
 
 References: 
 
 - https://www.docker.com/
-- http://www.projectatomic.io/
-- https://wiki.centos.org/SpecialInterestGroup/Atomic
+- https://www.centos.org/
 - http://www.redhat.com/en/technologies/linux-platforms/enterprise-linux

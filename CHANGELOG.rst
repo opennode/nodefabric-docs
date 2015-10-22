@@ -1,15 +1,16 @@
 CHANGELOG
 =========
 
-0.4.3 (Unreleased)
+0.4.3 (Oct 22, 2015)
 ----------------------
 - FEATURE: Added support for MariaDB configuration files data volume
-- FEATURE: Added nodefabric-update utility
+- FEATURE: Added nodefabric-update utility for system update
 - IMPROVEMENT: Switched to non-blocking XtraBackup SST method for MariaDB-Galera (was rsync)
-- IMPROVEMENT: Changed internal load-balanced MariaDB-Galera service endpoint to active-backup mode (in order to avoid potential multi-master deadlock problems with co-located apps using internal service endpoint)
-- IMPROVEMENT: nf-galera-ctl database management subcommands rewritten for supporting convinient root password input (when required)
+- IMPROVEMENT: Changed internal load-balanced MariaDB-Galera service endpoint to active-backup mode (in order to avoid potential multi-master deadlock problems with co-located apps using internal mysql service endpoint)
+- IMPROVEMENT: nf-galera-ctl database management subcommands supporting root password input (when required)
+- IMPROVEMENT: Better nf-galera service check script - in order to prevent node status flapping
 - BUGFIX: Fixed nf-galera-ctl password change/update replication issue
-
+- EXPERIMENTAL: Implemented initial support for (fixed) 5-node clusters
 
 0.4.2 (Sep 29, 2015)
 ----------------------

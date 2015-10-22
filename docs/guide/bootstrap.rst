@@ -17,10 +17,30 @@ However all services are later capable of repeatable (and non-destructive) autom
 NF Core Layer
 +++++++++++++++++++++++
 
-When NodeFabric nodes boot-up first time - they need to join and form the Consul cluster. For joining the cluster together each node must know about the other nodes participating - ie how to connect with each other. There are two possible methods for initializing cluster hostmap:
+.. note:: Each node must have its unique FQDN hostname set - otherwise nf-consul service container will refuse to start!
+
+When NodeFabric nodes boot-up first time - they need to join and form the Consul cluster. For joining the cluster together each node must have it's own FQDN hostname set and it needs to know about the other nodes participating - ie how to connect with other nodes (ie having cluster hostmap). There are two supported methods for initializing cluster hostmap:
 
 - by using remote auto-join mode with Hashicorp ATLAS public service (strictly optional but very convinient - hence recommended)
 - by editing /etc/nodefabric/nodefabric.hostmap config file manually (on ALL nodes) 
+
+Setup node FQDN hostname (IMPORTANT)
+*************************************
+
+Depending on target environment there are three different cases:
+
+- in case of AWS node hostnames will be set by default already (using VPC LAN ip as a hostname) - optionally it is possible to supply custom hostname through user-data (ie NODENAME=node1.example.com)
+- in case of Openstack please set VM hostname by supplying NODENAME=node1.example.com as part of user-data during VM launch
+- in case of non-cloud deployments please login to node shell and set hostname manually - by following this recipe:
+
+.. code-block:: bash
+
+    # NB! You must update also HOSTNAME environment variable - as it is used in scripts!
+    export HOSTNAME=node1.nf.int
+    hostnamectl set-hostname $HOSTNAME
+
+    # verify
+    echo $HOSTNAME && hostnamectl
 
 Activating remote auto-join mode
 ********************************
@@ -127,14 +147,12 @@ Once all DB service nodes reach "red/up/failed" status -- you can execute 'nf-ga
 
    [centos@ip-172-30-0-100 ~]$ sudo nf-galera-ctl bootstrap
 
-It might take up to 1-2 minutes normally - when DB node statuses should turn to green in nodefabric-dashboard - and global DB service status should reach into “RUNNING” state:   
+It might take up to couple of minutes normally - when DB node statuses should turn to green in nodefabric-dashboard - and global DB service status should reach into “RUNNING” state:   
 
 .. figure:: ../images/screenshots/aws_nf_galera_bootstrapped.png
     :alt: MariaDB-Galera nodes bootstrapped
 
-Once succesfully bootstrapped - default MySQL admin account is “root:rootpass”.
-
-.. note:: In case of NodeFabric 0.4.2 (AWS) or newer - DB root password is left empty and the admin account connectivity is limited to localhost
+.. note:: After successful bootstrap database "root" user password is left empty and the account connectivity is limited to localhost
 
 
 Debug
