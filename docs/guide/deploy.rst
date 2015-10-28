@@ -115,21 +115,21 @@ Method #1: EC2 Console (recommended)
 Prebuilt NodeFabric AWS cloud images (AMIs) are available in all Amazon EC2 regions.
 Please lookup image ID for your desired target region from the following table:
 
-**NodeFabric-0.4.2 AMIs**
+**NodeFabric-0.4.3 AMIs**
 
 .. csv-table::
    :header: "Region", "ID"
    :widths: 80, 50
 
-   "US East (N. Virginia)", "ami-7b86ff1e"
-   "US West (Oregon)", "ami-bde9f18d"
-   "US West (N. California)", "ami-399a5d7d"
-   "EU (Frankfurt)", "ami-3c9d9e21"
-   "EU (Ireland)", "ami-954961e2"
-   "Asia Pacific (Singapore)", "ami-e86b7cba"
-   "Asia Pacific (Sydney)", "ami-513e776b"
-   "Asia Pacific (Tokyo)", "ami-b69805b6"
-   "South America (Sao Paulo)", "ami-fb0397e6"
+   "US East (N. Virginia)", "ami-1daaf778"
+   "US West (Oregon)", "ami-1045a623"
+   "US West (N. California)", "ami-ddce0d99"
+   "EU (Frankfurt)", "ami-9cd0dc81"
+   "EU (Ireland)", "ami-79635c0e"
+   "Asia Pacific (Singapore)", "ami-8cdccfde"
+   "Asia Pacific (Sydney)", "ami-b1afe58b"
+   "Asia Pacific (Tokyo)", "ami-f0315cf0"
+   "South America (Sao Paulo)", "ami-5112834c"
 
 Search for public AMI ID under EC2 -> AMIs and launch it:
 
